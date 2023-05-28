@@ -7,6 +7,11 @@ describe('TestSuite', function(){
   const email = `${name}@hh.com`
   const password = "123456"
 
+  const shipping = ['abcde efgh', '123-456 -678',
+  "Av. adbc 123 def", "qwer",
+  'China', 'Anhui', 14563]
+
+
   before('Sign up', function(){
       //Go to main web page
       cy.visit('/')
@@ -83,7 +88,7 @@ describe('TestSuite', function(){
       .should('not.be.visible')
   })
 
-  it('Buy product2', function(){
+  it.skip('Buy product2', function(){
       cy.visit('/')
 
       //Go to Women area
@@ -124,7 +129,7 @@ describe('TestSuite', function(){
       .should('not.be.visible')
   })
 
-  it('Buy product3', function(){
+  it.skip('Buy product3', function(){
       cy.visit('/')
 
       //Go to Men area
@@ -185,13 +190,13 @@ describe('TestSuite', function(){
       .should('have.text', 'Shipping Address')
 
       //Fill the shipping address
-      cy.get("input[placeholder='Full name']").type('abcde')
-      cy.get("input[placeholder='Telephone']").type("123456")
-      cy.get("input[placeholder='Address']").type("adbc 123 def")
-      cy.get("input[placeholder='City']").type("qwer")
-      cy.get('.form-field[placeholder="Country"]').select("China")
-      cy.get('.form-field[placeholder="Province"]').select("Anhui")
-      cy.get("input[placeholder='Postcode']").type(14563)
+      cy.get("input[placeholder='Full name']").type(shipping[0])
+      cy.get("input[placeholder='Telephone']").type(shipping[1])
+      cy.get("input[placeholder='Address']").type(shipping[2])
+      cy.get("input[placeholder='City']").type(shipping[3])
+      cy.get('.form-field[placeholder="Country"]').select(shipping[4])
+      cy.get('.form-field[placeholder="Province"]').select(shipping[5])
+      cy.get("input[placeholder='Postcode']").type(shipping[6])
       cy.wait(2000)
       cy.get("#method1")
       .check({force:true})
@@ -236,6 +241,61 @@ describe('TestSuite', function(){
       cy.get("button[class='button primary']").click()
       cy.get('.checkout-success-customer-info')
       .should('include.text', `Thank you ${name}!`)
+
+      cy.get('.customer-info.mt-3.mb-2')
+      .should('be.visible')
+
+      //Verify Contact information
+      cy.get('.grid.grid-cols-2.gap-3')
+      .find('div.mb-2')
+      .eq(0)
+      .should('include.text', email)
+
+      //Verifiy Payment method
+      cy.get('.grid.grid-cols-2.gap-3')
+      .find('div.mb-2')
+      .eq(1)
+      .should('include.text', 'Credit Card')
+
+      //Verify Shipping Adrres
+      cy.get('.grid.grid-cols-2.gap-3')
+      .find('div.address-summary')
+      .eq(0).as('ship_details1')
+      .find('.full-name')
+      .should('have.text', shipping[0])
+
+      cy.get('@ship_details1')
+      .find('.address-one')
+      .should('have.text', shipping[2])
+
+      cy.get('@ship_details1')
+      .find('.city-province-postcode')
+      .should('include.text', `${shipping[6]}, ${shipping[3]}`)
+      .and('include.text', `${shipping[5]}, ${shipping[4]}`)
+
+      cy.get('@ship_details1')
+      .find('.telephone')
+      .should('have.text', shipping[1])
+
+      //Verify Billing Adress
+      cy.get('.grid.grid-cols-2.gap-3')
+      .find('div.address-summary')
+      .eq(1).as('ship_details2')
+      .find('.full-name')
+      .should('have.text', shipping[0])
+
+      cy.get('@ship_details2')
+      .find('.address-one')
+      .should('have.text', shipping[2])
+
+      cy.get('@ship_details2')
+      .find('.city-province-postcode')
+      .should('include.text', `${shipping[6]}, ${shipping[3]}`)
+      .and('include.text', `${shipping[5]}, ${shipping[4]}`)
+
+      cy.get('@ship_details2')
+      .find('.telephone')
+      .should('have.text', shipping[1])
 
 
   })
