@@ -4,15 +4,19 @@ import 'cypress-iframe';
 describe('TestSuite', function(){
     //Create customer data
     const name = `user${Cypress._.random(1e5)}` 
-    //const email = `${name}@hh.com`
-    const email = "user76201@hh.com"
+    const email = `${name}@hh.com`
+    //const email = "user76201@hh.com"
     const password = "123456"
 
     const shipping = ['abcde efgh', '123-456 -678',
     "Av. adbc 123 def", "qwer",
     'China', 'Anhui', 14563]
 
-
+    const products = [
+                    ["Continental 80 shoes", "XL", "White", 1],
+                    ["Renew cotton chuck taylor all star", "L", "Green", 3],
+                    ["Swift run x shoes", "S", "Red", 4]
+                    ]
 
 
     before('Sign up', function(){
@@ -63,21 +67,21 @@ describe('TestSuite', function(){
         .should('have.text', 'Kids')
 
         //Select shoes
-        cy.get("img[alt='Continental 80 shoes']").click()
+        cy.get(`img[alt='${products[0][0]}']`).click()
         cy.get('.product-single-name')
-        .should('have.text', 'Continental 80 shoes')
+        .should('have.text', `${products[0][0]}`)
 
         //Select size and color
         cy.get('li.mr-05')
-        .contains('XL').click()
+        .contains(`${products[0][1]}`).click()
         cy.get('li.selected.mr-05')
-        .contains('XL')
+        .contains(`${products[0][1]}`)
         .should('exist')
 
         cy.get('li.mr-05')
-        .contains('White').click()
+        .contains(`${products[0][2]}`).click()
         cy.get('li.selected.mr-05')
-        .contains('White')
+        .contains(`${products[0][2]}`)
         .should('exist')
 
         //Add to cart
@@ -100,25 +104,25 @@ describe('TestSuite', function(){
         .should('have.text', 'Women')
 
         //Select shoes
-        cy.get("img[alt='Lite racer adapt 3.0 shoes']").click()
+        cy.get(`img[alt='${products[1][0]}']`).click()
         cy.get('.product-single-name')
-        .should('have.text', 'Lite racer adapt 3.0 shoes')
+        .should('have.text', `${products[1][0]}`)
 
         //Select 3 units
-        cy.get("input[placeholder='Qty']").clear().type(3)
-        .should('have.value', 3)
+        cy.get("input[placeholder='Qty']").clear().type(`${products[1][3]}`)
+        .should('have.value', `${products[1][3]}`)
 
         //Select size and color
         cy.get('li.mr-05')
-        .contains('L').click()
+        .contains(`${products[1][1]}`).click()
         cy.get('li.selected.mr-05')
-        .contains('L')
+        .contains(`${products[1][1]}`)
         .should('exist')
 
         cy.get('li.mr-05')
-        .contains('Black').click()
+        .contains(`${products[1][2]}`).click()
         cy.get('li.selected.mr-05')
-        .contains('Black')
+        .contains(`${products[1][2]}`)
         .should('exist')
 
         //Add to cart
@@ -141,24 +145,24 @@ describe('TestSuite', function(){
         .should('have.text', 'Men')
 
         //Select shoes
-        cy.get("img[alt='Swift run x shoes']").click()
+        cy.get(`img[alt='${products[2][0]}']`).click()
         cy.get('.product-single-name')
-        .should('have.text', 'Swift run x shoes')
+        .should('have.text', `${products[2][0]}`)
 
         //Select 4 units
-        cy.get("input[placeholder='Qty']").clear().type(4)
+        cy.get("input[placeholder='Qty']").clear().type(`${products[2][3]}`)
 
         //Select size and color
         cy.get('.mr-05')
-        .contains('S').click()
+        .contains(`${products[2][1]}`).click()
         cy.get('.selected.mr-05')
-        .contains('S')
+        .contains(`${products[2][1]}`)
         .should('exist')
 
         cy.get('.mr-05')
-        .contains('Red').click()
+        .contains(`${products[2][2]}`).click()
         cy.get('.selected.mr-05')
-        .contains('Red')
+        .contains(`${products[2][2]}`)
         .should('exist')
         
         //Verify the picture is for the selected color
@@ -244,14 +248,14 @@ describe('TestSuite', function(){
         //Place and verify the order
         cy.get("button[class='button primary']").click()
         cy.get('.checkout-success-customer-info')
-        //.should('include.text', `Thank you ${name}!`)
-        .should('include.text', `Thank you user76201!`)
+        .should('include.text', `Thank you ${name}!`)
+        //.should('include.text', `Thank you user76201!`)
 
         cy.url().as('checkout')
 
     })
 
-    it.skip('Check the correct information', function(){
+    it('Check the customer information', function(){
         cy.visit(this.checkout)
 
         cy.get('.customer-info.mt-3.mb-2')
@@ -318,55 +322,55 @@ describe('TestSuite', function(){
         .each(($elem, index, lis) => {
             const find_product = $elem.text()
 
-            if(find_product.includes('Continental 80 shoes')){
+            if(find_product.includes(`${products[0][0]}`)){
                 //Check product's name
                 cy.get('.product-column').eq(index)
                 .find('.font-semibold')
-                .should('include.text', 'Continental 80 shoes')
+                .should('include.text', `${products[0][0]}`)
 
                 //Check size and color
                 cy.get('.product-column .mt-05 ul').eq(index)
                 .find('li')
-                .should('contain.text', 'Size: XL')
-                .and('contain.text', 'Color: White')
+                .should('contain.text', `Size: ${products[0][1]}`)
+                .and('contain.text', `Color: ${products[0][2]}`)
 
                 //Check quantity
                 cy.get('.product-thumbnail').eq(index)
-                .should('contain.text', 1)
+                .should('contain.text', `${products[0][3]}`)
             }
 
-            if(find_product.includes('Lite racer adapt 3.0 shoes')){
+            if(find_product.includes(`${products[1][0]}`)){
                 //Check product's name
                 cy.get('.product-column').eq(index)
                 .find('.font-semibold')
-                .should('include.text', 'Lite racer adapt 3.0 shoes')
+                .should('include.text', `${products[1][0]}`)
 
                 //Check size and color
                 cy.get('.product-column .mt-05 ul').eq(index)
                 .find('li')
-                .should('contain.text', 'Size: L')
-                .and('contain.text', 'Color: Black')
+                .should('contain.text', `Size: ${products[1][1]}`)
+                .and('contain.text', `Color: ${products[1][2]}`)
 
                 //Check quantity
                 cy.get('.product-thumbnail').eq(index)
-                .should('contain.text',3 )
+                .should('contain.text',`${products[1][3]}` )
             }
 
-            if(find_product.includes('Swift run x shoes')){
+            if(find_product.includes(`${products[2][0]}`)){
                 //Check product's name
                 cy.get('.product-column').eq(index)
                 .find('.font-semibold')
-                .should('include.text', 'Swift run x shoes')
+                .should('include.text', `${products[2][0]}`)
 
                 //Check size and color
                 cy.get('.product-column .mt-05 ul').eq(index)
                 .find('li')
-                .should('contain.text', 'Size: S')
-                .and('contain.text', 'Color: Red')
+                .should('contain.text', `Size: ${products[2][1]}`)
+                .and('contain.text', `Color: ${products[2][2]}`)
 
                 //Check quantity
                 cy.get('.product-thumbnail').eq(index)
-                .should('contain.text', 4)
+                .should('contain.text', `${products[2][3]}`)
             }
 
         })
