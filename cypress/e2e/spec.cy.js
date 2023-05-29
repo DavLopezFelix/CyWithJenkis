@@ -43,7 +43,7 @@ describe('TestSuite', function(){
     })
 
     beforeEach('Session', function(){
-        //Custom command: log in
+        //Custom command created to log in
         cy.login(email, password)
 
     })
@@ -249,7 +249,6 @@ describe('TestSuite', function(){
         cy.get("button[class='button primary']").click()
         cy.get('.checkout-success-customer-info')
         .should('include.text', `Thank you ${name}!`)
-        //.should('include.text', `Thank you user76201!`)
 
         cy.url().as('checkout')
 
