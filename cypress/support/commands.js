@@ -39,11 +39,7 @@ Cypress.Commands.add('login', (email, password) =>
     cy.get("input[placeholder='Email']").type(email)
     cy.get("input[placeholder='Password']").type(password)
     cy.get("button[type='submit']").click()
-
-    //Verify the email of the user logged in
-    cy.get("a[href='/account']").click()
-    cy.get(".account-details-email.flex.gap-1")
-    .should('have.text', email)
+    cy.wait(1000)
         
     })
 

@@ -5,7 +5,6 @@ describe('TestSuite', function(){
     //Create customer data
     const name = `user${Cypress._.random(1e5)}` 
     const email = `${name}@hh.com`
-    //const email = "user76201@hh.com"
     const password = "123456"
 
     const shipping = ['abcde efgh', '123-456 -678',
@@ -18,7 +17,7 @@ describe('TestSuite', function(){
                     ["Swift run x shoes", "S", "Red", 4]
                     ]
 
-
+    //Before all, create the new user
     before('Sign up', function(){
         //Go to main web page
         cy.visit('/')
@@ -44,11 +43,12 @@ describe('TestSuite', function(){
     })
 
     beforeEach('Session', function(){
+        //Custom command: log in
         cy.login(email, password)
 
     })
 
-    it('Log in', function(){
+    it('Sign up & Log in', function(){
         cy.visit('/')
 
         //Verify the email of the user logged in
@@ -315,7 +315,7 @@ describe('TestSuite', function(){
     
     })
 
-    it('Check the correct items', function(){
+    it('Check the items', function(){
         cy.visit(this.checkout)
 
         cy.get('.listing.items-table tbody tr')
