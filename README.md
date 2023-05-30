@@ -1,5 +1,5 @@
 # Tranzact_WebPage_challenge
--The escript is testing the process of buying and checout some products in an online store.
+- The escript is testing the process of buying and checout some products in an online store.
 - The porpouse is to assess the process of buying specific products, as well as, billing address and payment option.
 - The script was created using Cypress Framework
 
