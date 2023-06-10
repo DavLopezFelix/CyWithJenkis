@@ -1,5 +1,5 @@
 import 'cypress-iframe';
-import userData from '../fixtures/userData.json';
+import userData from '../fixtures/userData.json'
 
 
 describe('TestSuite', function(){
@@ -7,11 +7,6 @@ describe('TestSuite', function(){
     const name = `user${Cypress._.random(1e5)}` 
     const email = `${name}@hh.com`
 
-    const products = [
-                    ["Continental 80 shoes", "XL", "White", 1],
-                    ["Renew cotton chuck taylor all star", "L", "Green", 3],
-                    ["Swift run x shoes", "S", "Red", 4]
-                    ]
 
     //Before all, create the new user
     before('Sign up', function(){
@@ -54,130 +49,56 @@ describe('TestSuite', function(){
     })
 
 
-    it('Buy product1', function(){   
-        cy.visit('/')
-        
-        //Go to Kids area
-        cy.get('a.button.primary[href="/category/kids"]').click()
-        cy.get('.category-name.mt-25')
-        .should('have.text', 'Kids')
 
-        //Select shoes
-        cy.get(`img[alt='${products[0][0]}']`).click()
-        cy.get('.product-single-name')
-        .should('have.text', `${products[0][0]}`)
+    it('Buy 3 products', function(){
 
-        //Select size and color
-        cy.get('li.mr-05')
-        .contains(`${products[0][1]}`).click()
-        cy.get('li.selected.mr-05')
-        .contains(`${products[0][1]}`)
-        .should('exist')
+        cy.fixture('buyProducts.json').then((fixtureData) => {
 
-        cy.get('li.mr-05')
-        .contains(`${products[0][2]}`).click()
-        cy.get('li.selected.mr-05')
-        .contains(`${products[0][2]}`)
-        .should('exist')
+            fixtureData.forEach((buyProducts) => {
+                cy.visit('/')
+                //Go to the area
+                cy.get(`a.button.primary[href="${buyProducts.link}"]`).click()
+                cy.get('.category-name.mt-25')
+                .should('have.text', buyProducts.area)
 
-        //Add to cart
-        cy.get("button[type='button']").click()
+                //Select shoes
+                cy.get(`img[alt='${buyProducts.name}']`).click()
+                cy.get('.product-single-name')
+                .should('have.text', buyProducts.name)
 
-        //Dismiss pop-up
-        cy.get('.toast-mini-cart')
-        .should('be.visible')
-        cy.get(".add-cart-popup-continue.text-center.underline.block").click()
-        cy.get('.toast-mini-cart')
-        .should('not.be.visible')
+                //Select 3 units
+                cy.get("input[placeholder='Qty']").clear().type(buyProducts.qty)
+                .should('have.value', buyProducts.qty)
+
+                //Select size and color
+                cy.get('li.mr-05')
+                .contains(`${buyProducts.size}`).click()
+                cy.get('li.selected.mr-05')
+                .contains(buyProducts.size)
+                .should('exist')
+
+                cy.get('li.mr-05')
+                .contains(buyProducts.color).click()
+                cy.get('li.selected.mr-05')
+                .contains(buyProducts.color)
+                .should('exist')
+
+                //Add to cart
+                cy.get("button[type='button']").click()
+
+                //Dismiss pop-up
+                cy.get('.toast-mini-cart')
+                .should('be.visible')
+                cy.get(".add-cart-popup-continue.text-center.underline.block").click()
+                cy.get('.toast-mini-cart')
+                .should('not.be.visible')
+
+            })
+
+        })
+            
     })
-
-    it('Buy product2', function(){
-        cy.visit('/')
-
-        //Go to Women area
-        cy.get('a.button.primary[href="/category/women"]').click()
-        cy.get('.category-name.mt-25')
-        .should('have.text', 'Women')
-
-        //Select shoes
-        cy.get(`img[alt='${products[1][0]}']`).click()
-        cy.get('.product-single-name')
-        .should('have.text', `${products[1][0]}`)
-
-        //Select 3 units
-        cy.get("input[placeholder='Qty']").clear().type(`${products[1][3]}`)
-        .should('have.value', `${products[1][3]}`)
-
-        //Select size and color
-        cy.get('li.mr-05')
-        .contains(`${products[1][1]}`).click()
-        cy.get('li.selected.mr-05')
-        .contains(`${products[1][1]}`)
-        .should('exist')
-
-        cy.get('li.mr-05')
-        .contains(`${products[1][2]}`).click()
-        cy.get('li.selected.mr-05')
-        .contains(`${products[1][2]}`)
-        .should('exist')
-
-        //Add to cart
-        cy.get("button[type='button']").click()
-
-        //Dismiss pop-up
-        cy.get('.toast-mini-cart')
-        .should('be.visible')
-        cy.get(".add-cart-popup-continue.text-center.underline.block").click()
-        cy.get('.toast-mini-cart')
-        .should('not.be.visible')
-    })
-
-    it('Buy product3', function(){
-        cy.visit('/')
-
-        //Go to Men area
-        cy.get('a.button.primary[href="/category/men"]').click()
-        cy.get('.category-name.mt-25')
-        .should('have.text', 'Men')
-
-        //Select shoes
-        cy.get(`img[alt='${products[2][0]}']`).click()
-        cy.get('.product-single-name')
-        .should('have.text', `${products[2][0]}`)
-
-        //Select 4 units
-        cy.get("input[placeholder='Qty']").clear().type(`${products[2][3]}`)
-
-        //Select size and color
-        cy.get('.mr-05')
-        .contains(`${products[2][1]}`).click()
-        cy.get('.selected.mr-05')
-        .contains(`${products[2][1]}`)
-        .should('exist')
-
-        cy.get('.mr-05')
-        .contains(`${products[2][2]}`).click()
-        cy.get('.selected.mr-05')
-        .contains(`${products[2][2]}`)
-        .should('exist')
-        
-        //Verify the picture is for the selected color
-        cy.get('#product-current-image')
-        .find('img')
-        .invoke('attr', 'src')
-        .should('contain', 'Red')
-
-        //Add to the cart
-        cy.get("button[type='button']").click()
-
-        //Dismiss the pop-up
-        cy.get('.toast-mini-cart')
-        .should('be.visible')
-        cy.get(".add-cart-popup-continue.text-center.underline.block").click()
-        cy.get('.toast-mini-cart')
-        .should('not.be.visible')
-
-    })
+    
 
     it('Checkout process', function(){
         cy.visit('/')
