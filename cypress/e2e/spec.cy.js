@@ -1,15 +1,11 @@
 import 'cypress-iframe';
+import userData from '../fixtures/userData.json';
 
 
 describe('TestSuite', function(){
     //Create customer data
     const name = `user${Cypress._.random(1e5)}` 
     const email = `${name}@hh.com`
-    const password = "123456"
-
-    const shipping = ['abcde efgh', '123-456 -678',
-    "Av. adbc 123 def", "qwer",
-    'China', 'Anhui', 14563]
 
     const products = [
                     ["Continental 80 shoes", "XL", "White", 1],
@@ -37,14 +33,14 @@ describe('TestSuite', function(){
         //Create a new account
         cy.get("input[placeholder='Full Name']").type(name)
         cy.get("input[placeholder='Email']").type(email)
-        cy.get("input[placeholder='Password']").type(password)
+        cy.get("input[placeholder='Password']").type(userData.password)
         cy.get("button[type='button']").click()
 
     })
 
     beforeEach('Session', function(){
         //Custom command created to log in
-        cy.login(email, password)
+        cy.login(email, userData.password)
 
     })
 
@@ -197,13 +193,13 @@ describe('TestSuite', function(){
         .should('have.text', 'Shipping Address')
 
         //Fill the shipping address
-        cy.get("input[placeholder='Full name']").type(shipping[0])
-        cy.get("input[placeholder='Telephone']").type(shipping[1])
-        cy.get("input[placeholder='Address']").type(shipping[2])
-        cy.get("input[placeholder='City']").type(shipping[3])
-        cy.get('.form-field[placeholder="Country"]').select(shipping[4])
-        cy.get('.form-field[placeholder="Province"]').select(shipping[5])
-        cy.get("input[placeholder='Postcode']").type(shipping[6])
+        cy.get("input[placeholder='Full name']").type(userData.name_user)
+        cy.get("input[placeholder='Telephone']").type(userData.phone)
+        cy.get("input[placeholder='Address']").type(userData.address)
+        cy.get("input[placeholder='City']").type(userData.zone)
+        cy.get('.form-field[placeholder="Country"]').select(userData.country)
+        cy.get('.form-field[placeholder="Province"]').select(userData.City)
+        cy.get("input[placeholder='Postcode']").type(userData.cPostal)
         cy.wait(2000)
 
         cy.get("#method1")
@@ -277,40 +273,40 @@ describe('TestSuite', function(){
         .find('div.address-summary')
         .eq(0).as('ship_details1')
         .find('.full-name')
-        .should('have.text', shipping[0])
+        .should('have.text', userData.name_user)
 
         cy.get('@ship_details1')
         .find('.address-one')
-        .should('have.text', shipping[2])
+        .should('have.text', userData.address)
 
         cy.get('@ship_details1')
         .find('.city-province-postcode')
-        .should('include.text', `${shipping[6]}, ${shipping[3]}`)
-        .and('include.text', `${shipping[5]}, ${shipping[4]}`)
+        .should('include.text', `${userData.cPostal}, ${userData.zone}`)
+        .and('include.text', `${userData.City}, ${userData.country}`)
 
         cy.get('@ship_details1')
         .find('.telephone')
-        .should('have.text', shipping[1])
+        .should('have.text', userData.phone)
 
         //Verify Billing Address
         cy.get('.grid.grid-cols-2.gap-3')
         .find('div.address-summary')
         .eq(1).as('ship_details2')
         .find('.full-name')
-        .should('have.text', shipping[0])
+        .should('have.text', userData.name_user)
 
         cy.get('@ship_details2')
         .find('.address-one')
-        .should('have.text', shipping[2])
+        .should('have.text', userData.address)
 
         cy.get('@ship_details2')
         .find('.city-province-postcode')
-        .should('include.text', `${shipping[6]}, ${shipping[3]}`)
-        .and('include.text', `${shipping[5]}, ${shipping[4]}`)
+        .should('include.text', `${userData.cPostal}, ${userData.zone}`)
+        .and('include.text', `${userData.City}, ${userData.country}`)
 
         cy.get('@ship_details2')
         .find('.telephone')
-        .should('have.text', shipping[1])
+        .should('have.text', userData.phone)
     
     })
 
