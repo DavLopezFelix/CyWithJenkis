@@ -1,4 +1,4 @@
-# Tranzact_WebPage_challenge
+# WebPage_testing
 - The script is testing the process of buying and checkout some products in an online store.
 - The purpose is to assess the process of buying specific products, as well as, billing address and payment option.
 - The script was created using Cypress Framework
