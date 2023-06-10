@@ -66,7 +66,7 @@ describe('TestSuite', function(){
                 cy.get('.product-single-name')
                 .should('have.text', buyProducts.name)
 
-                //Select 3 units
+                //Select units
                 cy.get("input[placeholder='Qty']").clear().type(buyProducts.qty)
                 .should('have.value', buyProducts.qty)
 
@@ -238,60 +238,35 @@ describe('TestSuite', function(){
         .each(($elem, index, lis) => {
             const find_product = $elem.text()
 
-            if(find_product.includes(`${products[0][0]}`)){
-                //Check product's name
-                cy.get('.product-column').eq(index)
-                .find('.font-semibold')
-                .should('include.text', `${products[0][0]}`)
+            cy.fixture('buyProducts.json').then((fixtureData) => {
 
-                //Check size and color
-                cy.get('.product-column .mt-05 ul').eq(index)
-                .find('li')
-                .should('contain.text', `Size: ${products[0][1]}`)
-                .and('contain.text', `Color: ${products[0][2]}`)
+                fixtureData.forEach((products) => {
 
-                //Check quantity
-                cy.get('.product-thumbnail').eq(index)
-                .should('contain.text', `${products[0][3]}`)
-            }
+                    if(find_product.includes(products.name)){
+                        //Check product's name
+                        cy.get('.product-column').eq(index)
+                        .find('.font-semibold')
+                        .should('include.text', products.name)
+        
+                        //Check size and color
+                        cy.get('.product-column .mt-05 ul').eq(index)
+                        .find('li')
+                        .should('contain.text', `Size: ${products.size}`)
+                        .and('contain.text', `Color: ${products.color}`)
+        
+                        //Check quantity
+                        cy.get('.product-thumbnail').eq(index)
+                        .should('contain.text', products.qty)
 
-            if(find_product.includes(`${products[1][0]}`)){
-                //Check product's name
-                cy.get('.product-column').eq(index)
-                .find('.font-semibold')
-                .should('include.text', `${products[1][0]}`)
+                        return false
+                    }
+                })
+            })
 
-                //Check size and color
-                cy.get('.product-column .mt-05 ul').eq(index)
-                .find('li')
-                .should('contain.text', `Size: ${products[1][1]}`)
-                .and('contain.text', `Color: ${products[1][2]}`)
 
-                //Check quantity
-                cy.get('.product-thumbnail').eq(index)
-                .should('contain.text',`${products[1][3]}` )
-            }
-
-            if(find_product.includes(`${products[2][0]}`)){
-                //Check product's name
-                cy.get('.product-column').eq(index)
-                .find('.font-semibold')
-                .should('include.text', `${products[2][0]}`)
-
-                //Check size and color
-                cy.get('.product-column .mt-05 ul').eq(index)
-                .find('li')
-                .should('contain.text', `Size: ${products[2][1]}`)
-                .and('contain.text', `Color: ${products[2][2]}`)
-
-                //Check quantity
-                cy.get('.product-thumbnail').eq(index)
-                .should('contain.text', `${products[2][3]}`)
-            }
 
         })
-
-
     })
+
 
 })
