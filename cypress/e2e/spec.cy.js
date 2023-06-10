@@ -1,5 +1,6 @@
 import 'cypress-iframe';
 import userData from '../fixtures/userData.json'
+import creditCard from '../fixtures/creditCard.json'
 
 
 describe('TestSuite', function(){
@@ -54,33 +55,33 @@ describe('TestSuite', function(){
 
         cy.fixture('buyProducts.json').then((fixtureData) => {
 
-            fixtureData.forEach((buyProducts) => {
+            fixtureData.forEach((product) => {
                 cy.visit('/')
                 //Go to the area
-                cy.get(`a.button.primary[href="${buyProducts.link}"]`).click()
+                cy.get(`a.button.primary[href="${product.link}"]`).click()
                 cy.get('.category-name.mt-25')
-                .should('have.text', buyProducts.area)
+                .should('have.text', product.area)
 
                 //Select shoes
-                cy.get(`img[alt='${buyProducts.name}']`).click()
+                cy.get(`img[alt='${product.name}']`).click()
                 cy.get('.product-single-name')
-                .should('have.text', buyProducts.name)
+                .should('have.text', product.name)
 
                 //Select units
-                cy.get("input[placeholder='Qty']").clear().type(buyProducts.qty)
-                .should('have.value', buyProducts.qty)
+                cy.get("input[placeholder='Qty']").clear().type(product.qty)
+                .should('have.value', product.qty)
 
                 //Select size and color
                 cy.get('li.mr-05')
-                .contains(`${buyProducts.size}`).click()
+                .contains(`${product.size}`).click()
                 cy.get('li.selected.mr-05')
-                .contains(buyProducts.size)
+                .contains(product.size)
                 .should('exist')
 
                 cy.get('li.mr-05')
-                .contains(buyProducts.color).click()
+                .contains(product.color).click()
                 cy.get('li.selected.mr-05')
-                .contains(buyProducts.color)
+                .contains(product.color)
                 .should('exist')
 
                 //Add to cart
@@ -148,15 +149,15 @@ describe('TestSuite', function(){
                     //Fill the payment information
                     cy.iframe('@myFrame')
                     .find('input[name="cardnumber"]')
-                    .type('4242 4242 4242 4242')
+                    .type(creditCard.number)
 
                     cy.iframe('@myFrame')
                     .find('input[name="exp-date"]')
-                    .type('0424')
+                    .type(creditCard.expDate)
 
                     cy.iframe('@myFrame')
                     .find('input[name="cvc"]')
-                    .type('242')
+                    .type(creditCard.cvc)
                 }
 
             });
@@ -240,23 +241,23 @@ describe('TestSuite', function(){
 
             cy.fixture('buyProducts.json').then((fixtureData) => {
 
-                fixtureData.forEach((products) => {
+                fixtureData.forEach((product) => {
 
-                    if(find_product.includes(products.name)){
+                    if(find_product.includes(product.name)){
                         //Check product's name
                         cy.get('.product-column').eq(index)
                         .find('.font-semibold')
-                        .should('include.text', products.name)
+                        .should('include.text', product.name)
         
                         //Check size and color
                         cy.get('.product-column .mt-05 ul').eq(index)
                         .find('li')
-                        .should('contain.text', `Size: ${products.size}`)
-                        .and('contain.text', `Color: ${products.color}`)
+                        .should('contain.text', `Size: ${product.size}`)
+                        .and('contain.text', `Color: ${product.color}`)
         
                         //Check quantity
                         cy.get('.product-thumbnail').eq(index)
-                        .should('contain.text', products.qty)
+                        .should('contain.text', product.qty)
 
                         return false
                     }
