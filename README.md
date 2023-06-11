@@ -1,5 +1,5 @@
 # E-commerce E2E testing
-This repository contains a script that tests the process of buying and checking out products in an online store. The purpose of this script is to assess the functionality of buying specific products, as well as validating the billing address and payment options. The script is developed using the Cypress Framework.
+This repository contains a script that tests the process of creating a user, buying and checking out products in an online store. The purpose of this script is to assess the functionality of buying specific products, as well as validating the billing address and payment options. The script is developed using the Cypress Framework.
 
 
 ## Prerequisites
