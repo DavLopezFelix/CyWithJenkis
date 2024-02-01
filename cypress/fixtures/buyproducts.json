@@ -1,6 +1,6 @@
 [
     {
-        "link" : "/category/kids",
+        "link" : "/kids",
         "area" : "Kids",
         "name" : "Continental 80 shoes",
         "size" : "XL",
@@ -8,7 +8,7 @@
         "qty" : 1
     },
     {
-        "link" : "/category/women",
+        "link" : "/women",
         "area" : "Women",
         "name" : "Renew cotton chuck taylor all star",
         "size" : "L",
@@ -16,7 +16,7 @@
         "qty" : 3
     },
     {
-        "link" : "/category/men",
+        "link" : "/men",
         "area" : "Men",
         "name" : "Swift run x shoes",
         "size" : "S",
