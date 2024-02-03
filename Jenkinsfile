@@ -4,7 +4,7 @@ pipeline{
     parameters{
         string(name: "SPEC", defaultValue: "cypress/e2e/**", 
                 description:"Ej:cypress/integration/pom/*.spec.js")
-        choice(name: "BROWSER", choices: ["chrome", "firefox"],
+        choice(name: "BROWSER", choices: ["chrome", "edge"],
                 description:"Escoja un broser en donde ejecutar sus scripts.")
     }
 
