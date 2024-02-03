@@ -8,10 +8,6 @@ pipeline{
                 description:"Escoja un broser en donde ejecutar sus scripts.")
     }
 
-    options{
-        ansiColor('xterm')
-    }
-
     stages{
         stage('Build'){
             steps{
